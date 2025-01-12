@@ -17,7 +17,7 @@ y_train = train_data['label'].values
 X_train = train_data.drop(columns=['label']).values / 255
 
 # testing data (normalization)
-X_test = test_data.drop(columns=['label']).values / 255  # Ensure correct number of features
+X_test = test_data.drop(columns=['label']).values / 255  
 
 # initialize the weights and biases
 eta = 5e-1
@@ -74,10 +74,9 @@ for i in range(num_iter):
         gW0 = gW1 = gb0 = 1
 
 y_pred_final = h(X_train, W, b)
-#save the state of the model 
 # Save the state of the model
 try:
-  np.savez("goodweights.npz", W0=W[0], W1=W[1], b0=b[0])
+  np.savez("fnn_mnist_trained_model.npz", W0=W[0], W1=W[1], b0=b[0])
   print("Model saved")
 except:
   print("An exception occurred")
