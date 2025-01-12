@@ -19,14 +19,17 @@ X_train = train_data.drop(columns=['label']).values / 255
 # testing data (normalization)
 X_test = test_data.drop(columns=['label']).values / 255  # Ensure correct number of features
 
-
+# initialize the weights and biases
 eta = 5e-1
 alpha = 1e-6
 gamma = 0.99
 eps = 1e-3
+# number of iterations
 num_iter = 50
+# number of hidden units
 n_H = 256
 n = X_train.shape[1]
+# number of classes (digits)
 K = 10
 
 np.random.seed(1127825)
