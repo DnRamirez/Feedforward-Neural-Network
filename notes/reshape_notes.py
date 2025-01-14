@@ -1,5 +1,5 @@
-# reshaping an array, there are some rules you need to follow 
-# purpose: Matrix Multiplication: Many mathematical operations, such as matrix multiplication, require specific shapes. Reshaping ensures that the dimensions of arrays align properly for operations like dot products or other linear algebra computations.
+# Purpose: Matrix Multiplication: Many mathematical operations, such as matrix multiplication, require specific shapes. 
+# Reshaping ensures that the dimensions of arrays align properly for operations like dot products or other linear algebra computations.
 # Broadcasting: Reshaping allows arrays to be broadcast together, enabling arithmetic operations between arrays of different shapes.
 import numpy as np 
 
@@ -24,8 +24,9 @@ print("Before reshape: ", dotproduct)
 z = dotproduct.reshape(-1, 1)
 print("after reshape: ", z.shape)
 
-#case 2: flatten 
-z_flat = dotproduct.reshape(-1)  # This will change the shape to (2,)
+# case 2: flatten 
+# This will change the shape to (2,)
+z_flat = dotproduct.reshape(-1)  
 print("Flattened shape: ", z_flat.shape)
 
 # rules for reshape : If you have an array of shape (a, b), the total number of elements is a * b.
