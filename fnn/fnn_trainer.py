@@ -7,6 +7,7 @@ from fnn_utils import h, loss, backprop
 
 start_time = time.time() 
 
+
 train_data = pd.read_csv('../datasets/train.csv')
 test_data = pd.read_csv('../datasets/test.csv')
 
@@ -25,12 +26,24 @@ alpha = 1e-6
 gamma = 0.99
 eps = 1e-3
 # number of iterations
-num_iter = 50
+num_iter = 100
 # number of hidden units
 n_H = 256
 n = X_train.shape[1]
 # number of classes (digits)
 K = 10
+
+# Initialization: Live Plot (Training Loss)
+loss_values = []
+plt.ion()
+fig, ax = plt.subplots()
+line, = ax.plot([], [])
+ax.set_xlim(0, num_iter)
+ax.set_ylim(0, 3) 
+ax.set_xlabel("Iteration")
+ax.set_ylabel("Loss")
+ax.set_title("Live Training Loss")
+
 
 np.random.seed(1127825)
 W = [1e-1 * np.random.randn(n, n_H), 1e-1 * np.random.randn(n_H, K)]
@@ -56,21 +69,18 @@ for i in range(num_iter):
     b[0] -= etab0 * db[0]
 
     y_pred = h(X_train, W, b)
+
+    # Plot point 
+    current_loss = loss(y_pred, y_train)
+    loss_values.append(current_loss)
+    line.set_data(range(len(loss_values)), loss_values)
+    ax.set_ylim(0, max(loss_values) + 0.1)  # Dynamically rescale y-axis
+    plt.pause(0.01)
+    
     print("Training accuracy at iteration: ", i+1, " is {:.4%}".format(np.mean(np.argmax(y_pred, axis=1) == y_train)))
 
     if i % 500 == 0:
         y_pred = h(X_train, W, b)
-        print("Cross-entropy loss after", i + 1, "iterations is {:.8}".format(
-            loss(y_pred, y_train)))
-        print("Training accuracy after", i + 1, "iterations is {:.4%}".format(
-            np.mean(np.argmax(y_pred, axis=1) == y_train)))
-
-        print("gW0={:.4f} gW1={:.4f} gb0={:.4f}\netaW0={:.4f} etaW1={:.4f} etab0={:.4f}"
-              .format(gW0, gW1, gb0, etaW0, etaW1, etab0))
-
-        print("|dW0|={:.5f} |dW1|={:.5f} |db0|={:.5f}"
-              .format(np.linalg.norm(dW[0]), np.linalg.norm(dW[1]), np.linalg.norm(db[0])), "\n")
-
         gW0 = gW1 = gb0 = 1
 
 y_pred_final = h(X_train, W, b)
@@ -81,8 +91,13 @@ try:
 except:
   print("An exception occurred")
 
+# Final outputs
 print("Final cross-entropy loss is {:.8}".format(loss(y_pred_final, y_train)))
 print("Final training accuracy is {:.4%}".format(np.mean(np.argmax(y_pred_final, axis=1) == y_train)))
 end_time = time.time()
 elapsed_time = end_time - start_time
-print(f"Elapsed time: {elapsed_time} seconds")
+print(f"Training Time: {elapsed_time} seconds")
+
+# Plot termination 
+plt.ioff()
+plt.show()
